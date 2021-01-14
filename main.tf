@@ -14,7 +14,7 @@ locals {
 
   vpc_attachments_with_add_routes = chunklist(flatten([
     for k, v in var.vpc_attachments :
-      [for route in v["add_routes"] : setproduct([route["destination_cidr_block"]], route["route_table_ids"])] if length(lookup(v, "add_routes", {})) > 0
+      [for route in v["add_routes"] : setproduct([route["destination_cidr_block"]], route["route_table_ids"], var.vpc_attachments[k].tgw_id)] if length(lookup(v, "add_routes", {})) > 0
   ]), 2)
 }
 
@@ -147,11 +147,11 @@ resource "aws_ram_principal_association" "this" {
 ##########################
 resource "aws_route" "this" {
   count = length(local.vpc_attachments_with_add_routes)
-
   destination_cidr_block = local.vpc_attachments_with_add_routes[count.index][0]
   route_table_id         = local.vpc_attachments_with_add_routes[count.index][1]
-  transit_gateway_id     = aws_ec2_transit_gateway.this[0].id
+  transit_gateway_id     = local.vpc_attachments_with_add_routes[count.index][2]
 }
+
 resource "aws_ram_resource_share_accepter" "this" {
   count = ! var.create_tgw && var.share_tgw ? 1 : 0
 
