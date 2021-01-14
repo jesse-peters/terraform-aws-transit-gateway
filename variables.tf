@@ -52,21 +52,21 @@ variable "enable_vpn_ecmp_support" {
   default     = true
 }
 
-// VPC attachments
+# VPC attachments
 variable "vpc_attachments" {
   description = "Maps of maps of VPC details to attach to TGW. Type 'any' to disable type validation by Terraform."
   type        = any
   default     = {}
 }
 
-// TGW Route Table association and propagation
+# TGW Route Table association and propagation
 variable "transit_gateway_route_table_id" {
   description = "Identifier of EC2 Transit Gateway Route Table to use with the Target Gateway when reusing it between multiple TGWs"
   type        = string
   default     = null
 }
 
-// Tags
+# Tags
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
@@ -91,7 +91,7 @@ variable "tgw_vpc_attachment_tags" {
   default     = {}
 }
 
-// TGW resource sharing
+# TGW resource sharing
 variable "share_tgw" {
   description = "Whether to share your transit gateway with other accounts"
   type        = bool
@@ -120,4 +120,10 @@ variable "ram_principals" {
   description = "A list of principals to share TGW with. Possible values are an AWS account ID, an AWS Organizations Organization ARN, or an AWS Organizations Organization Unit ARN"
   type        = list(string)
   default     = []
+}
+
+variable "ram_resource_share_arn" {
+  description = "ARN of RAM resource share"
+  type        = string
+  default     = ""
 }
