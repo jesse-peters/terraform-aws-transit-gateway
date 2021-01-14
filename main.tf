@@ -14,8 +14,8 @@ locals {
 
   vpc_attachments_with_add_routes = chunklist(flatten([
     for k, v in var.vpc_attachments :
-      [for route in v["add_routes"] : setproduct([route["destination_cidr_block"]], route["route_table_ids"], var.vpc_attachments[k].tgw_id)] if length(lookup(v, "add_routes", {})) > 0
-  ]), 2)
+      [for route in v["add_routes"] : setproduct([route["destination_cidr_block"]], route["route_table_ids"], [var.create_tgw ? aws_ec2_transit_gateway.this[0].id : v["tgw_id"]])] if length(lookup(v, "add_routes", {})) > 0
+  ]), 3)
 }
 
 resource "aws_ec2_transit_gateway" "this" {
