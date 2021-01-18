@@ -9,7 +9,7 @@ locals {
 
   # List of maps with key and route values
   vpc_attachments_with_routes = chunklist(flatten([
-    for k, v in var.vpc_attachments : setproduct([map("key", k)], v["tgw_routes"]) if length(lookup(v, "tgw_routes", {})) > 0 && var.create_tgw == true
+    for k, v in var.vpc_attachments : setproduct([map("key", k)], v["tgw_routes"]) if length(lookup(v, "tgw_routes", {})) > 0
   ]), 2)
 
   vpc_attachments_with_add_routes = chunklist(flatten([
@@ -59,7 +59,7 @@ resource "aws_ec2_transit_gateway_route_table" "this" {
 
 # VPC attachment routes
 resource "aws_ec2_transit_gateway_route" "this" {
-  count = length(local.vpc_attachments_with_routes)
+  count = length(local.vpc_attachments_with_routes) * var.create_tgw
 
   destination_cidr_block = local.vpc_attachments_with_routes[count.index][1]["destination_cidr_block"]
   blackhole              = lookup(local.vpc_attachments_with_routes[count.index][1], "blackhole", null)
