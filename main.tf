@@ -59,7 +59,7 @@ resource "aws_ec2_transit_gateway_route_table" "this" {
 
 # VPC attachment routes
 resource "aws_ec2_transit_gateway_route" "this" {
-  count = length(local.vpc_attachments_with_routes) * tonumber(var.create_tgw)
+  count = length(local.vpc_attachments_with_routes) * (var.create_tgw ? 1 : 0)
 
   destination_cidr_block = local.vpc_attachments_with_routes[count.index][1]["destination_cidr_block"]
   blackhole              = lookup(local.vpc_attachments_with_routes[count.index][1], "blackhole", null)
