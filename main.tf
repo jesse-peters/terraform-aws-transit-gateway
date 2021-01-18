@@ -43,7 +43,7 @@ resource "aws_ec2_transit_gateway" "this" {
 # Route table and routes
 #########################
 resource "aws_ec2_transit_gateway_route_table" "this" {
-  count = length(local.vpc_attachments_with_routes) * (var.create_tgw ? 1 : 0)
+  count = var.create_tgw ? 1 : 0
 
   transit_gateway_id = aws_ec2_transit_gateway.this[0].id
 
