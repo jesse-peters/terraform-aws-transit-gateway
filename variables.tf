@@ -127,3 +127,4 @@ variable "ram_resource_share_arn" {
   type        = string
   default     = ""
 }
+
