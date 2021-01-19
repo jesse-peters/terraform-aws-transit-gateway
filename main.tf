@@ -4,7 +4,7 @@ locals {
   }
 
   vpc_attachments_without_default_route_table_propagation = {
-    for k, v in var.vpc_attachments : k => v if lookup(v, "transit_gateway_default_route_table_propagation", true) != true  && lookup(v, "disable_route_association", false) != true
+    for k, v in var.vpc_attachments : k => v if lookup(v, "transit_gateway_default_route_table_propagation", true) != true  && lookup(v, "disable_route_propagation", false) != true
   }
 
   # List of maps with key and route values
